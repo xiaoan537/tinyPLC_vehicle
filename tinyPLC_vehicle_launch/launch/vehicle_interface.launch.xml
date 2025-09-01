@@ -1,0 +1,6 @@
+<launch>
+  <!-- 占位：后续把你的 PLC/DBW 节点放到这里，并对接 Autoware 期望话题 -->
+  <group>
+    <node pkg="demo_nodes_cpp" exec="talker" name="placeholder_interface" output="screen" />
+  </group>
+</launch>

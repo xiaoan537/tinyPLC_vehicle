@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="tinyPLC_vehicle">
+  <!-- 占位 URDF：一个简单盒子作为车体，可后续替换网格 -->
+  <link name="base_link">
+    <visual>
+      <geometry><box size="0.6 0.4 0.2"/></geometry>
+    </visual>
+    <collision>
+      <geometry><box size="0.6 0.4 0.2"/></geometry>
+    </collision>
+    <inertial>
+      <mass value="10.0"/>
+      <origin xyz="0 0 0"/>
+      <inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1"/>
+    </inertial>
+  </link>
+</robot>
