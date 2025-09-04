@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="tinyPLC_vehicle">
+
+  <!-- 读取尺寸参数 -->
+  <xacro:property name="vi" value="${xacro.load_yaml('$(find-pkg-share tinyplc_vehicle_description)/config/vehicle_info.param.yaml')}"/>
+  <xacro:property name="wb" value="${vi['/**']['ros__parameters']['wheel_base']}"/>
+  <xacro:property name="fo" value="${vi['/**']['ros__parameters']['front_overhang']}"/>
+  <xacro:property name="ro" value="${vi['/**']['ros__parameters']['rear_overhang']}"/>
+  <xacro:property name="wt" value="${vi['/**']['ros__parameters']['wheel_tread']}"/>
+  <xacro:property name="lo" value="${vi['/**']['ros__parameters']['left_overhang']}"/>
+  <xacro:property name="rover" value="${vi['/**']['ros__parameters']['right_overhang']}"/>
+  <xacro:property name="vh" value="${vi['/**']['ros__parameters']['vehicle_height']}"/>
+
+  <!-- 计算网格中心位置（假设 STL 原点在几何中心） -->
+  <xacro:property name="x_center" value="${(wb + fo - ro)/2.0}"/>
+  <xacro:property name="z_center" value="${vh/2.0}"/>
+  <xacro:property name="length"  value="${wb + fo + ro}"/>
+  <xacro:property name="width"   value="${wt + lo + rover}"/>
+
+  <link name="base_link">
+    <!-- 可视网格：使用 STL -->
+    <visual>
+      <origin xyz="${x_center} 0 ${z_center}" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://tinyplc_vehicle_description/mesh/chassis_visual.stl" scale="1 1 1"/>
+      </geometry>
+      <!-- 让 RViz 显示成固定颜色（STL 无材质） -->
+      <material name="body_gray"><color rgba="0.6 0.6 0.6 1.0"/></material>
+    </visual>
+
+    <!-- 碰撞体：推荐用简化 STL 或盒子 -->
+    <collision>
+      <origin xyz="${x_center} 0 ${z_center}" rpy="0 0 0"/>
+      <geometry>
+        <!-- 用盒子足够即可：减少碰撞计算量 -->
+        <box size="${length} ${width} ${vh}"/>
+        <!-- 或换成你的简化 STL：
+        <mesh filename="package://tinyplc_vehicle_description/mesh/chassis_collision.stl" scale="1 1 1"/>
+        -->
+      </geometry>
+    </collision>
+
+    <!-- 惯性（占位，后续可替换为真实值） -->
+    <inertial>
+      <mass value="30.0"/>
+      <origin xyz="${x_center} 0 ${z_center}"/>
+      <inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1"/>
+    </inertial>
+  </link>
+</robot>
